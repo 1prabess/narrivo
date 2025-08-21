@@ -1,5 +1,12 @@
+import LoginForm from "@/components/auth/LoginForm";
+import Container from "@/components/layout/Container";
+
 const Login = () => {
-  return <div>Login</div>;
+  return (
+    <Container>
+      <LoginForm />
+    </Container>
+  );
 };
 
 export default Login;
