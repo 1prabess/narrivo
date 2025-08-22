@@ -8,6 +8,8 @@ import Button from "../common/Button";
 import Heading from "../common/Heading";
 import SocialAuth from "./SocialAuth";
 import { RegisterSchema, RegisterSchemaType } from "@/schemas/RegisterSchema";
+import { signUp } from "@/actions/auth/register";
+import { useState, useTransition } from "react";
 
 const RegisterForm = () => {
   const {
@@ -16,8 +18,21 @@ const RegisterForm = () => {
     formState: { errors },
   } = useForm<RegisterSchemaType>({ resolver: zodResolver(RegisterSchema) });
 
-  const onSubmit = (data: LoginSchemaType) => {
-    console.log("Form submitted:", data);
+  const [isPending, startTransition] = useTransition();
+
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+
+  const onSubmit = (data: RegisterSchemaType) => {
+    setError("");
+    setSuccess("");
+
+    startTransition(() => {
+      signUp(data).then((res) => {
+        setError(res.error);
+        setSuccess(res.success);
+      });
+    });
   };
 
   return (
@@ -39,6 +54,7 @@ const RegisterForm = () => {
         register={register}
         errors={errors}
         placeholder="Email"
+        disabled={isPending}
       />
 
       <FormField
@@ -47,6 +63,7 @@ const RegisterForm = () => {
         errors={errors}
         placeholder="password"
         type="Password"
+        disabled={isPending}
       />
 
       <FormField
@@ -55,13 +72,21 @@ const RegisterForm = () => {
         errors={errors}
         placeholder="Confirm Password"
         type="password"
+        disabled={isPending}
       />
 
-      <Button label="Submit" type="submit" />
+      <Button
+        label={isPending ? "Submitting..." : "Submit"}
+        type="submit"
+        disabled={isPending}
+      />
 
       <div className="flex justify-center">Or</div>
 
       <SocialAuth />
+
+      {error}
+      {success}
     </form>
   );
 };
