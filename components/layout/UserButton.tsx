@@ -16,7 +16,7 @@ const UserButton = () => {
       <DropdownMenuTrigger asChild>
         <button className="inline-flex focus:outline-none">
           <Avatar className="w-10 h-10">
-            <AvatarImage src="/path/to/avatar.jpg" alt="User avatar" />
+            {/* <AvatarImage src="/path/to/avatar.jpg" alt="User avatar" /> */}
             <AvatarFallback>
               <User />
             </AvatarFallback>
