@@ -9,6 +9,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Pencil, Bookmark, User, Settings, LogOut } from "lucide-react";
+import { signOut } from "next-auth/react";
 
 const UserButton = () => {
   return (
@@ -52,7 +53,10 @@ const UserButton = () => {
         </DropdownMenuItem>
 
         <DropdownMenuItem>
-          <button className="flex items-center gap-2 w-full text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md p-2">
+          <button
+            onClick={() => signOut()}
+            className="flex items-center gap-2 w-full text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md p-2"
+          >
             <LogOut size={18} /> Sign Out
           </button>
         </DropdownMenuItem>
