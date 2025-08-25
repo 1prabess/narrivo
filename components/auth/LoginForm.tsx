@@ -7,6 +7,10 @@ import FormField from "../common/FormField";
 import Button from "../common/Button";
 import Heading from "../common/Heading";
 import SocialAuth from "./SocialAuth";
+import { useState, useTransition } from "react";
+import { login } from "@/actions/auth/login";
+import { useRouter } from "next/navigation";
+import { LOGIN_REDIRECT } from "@/routes";
 
 const LoginForm = () => {
   const {
@@ -15,8 +19,23 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm<LoginSchemaType>({ resolver: zodResolver(LoginSchema) });
 
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>("");
+  const router = useRouter();
+
   const onSubmit = (data: LoginSchemaType) => {
-    console.log("Form submitted:", data);
+    setError("");
+    startTransition(() => {
+      login(data).then((res) => {
+        if (res?.error) {
+          setError(res.error);
+        }
+
+        if (!res?.error) {
+          router.push(LOGIN_REDIRECT);
+        }
+      });
+    });
   };
 
   return (
@@ -31,6 +50,7 @@ const LoginForm = () => {
         register={register}
         errors={errors}
         placeholder="Email"
+        disabled={isPending}
       />
 
       <FormField
@@ -39,9 +59,12 @@ const LoginForm = () => {
         errors={errors}
         placeholder="Password"
         type="password"
+        disabled={isPending}
       />
 
-      <Button label="Submit" type="submit" />
+      {error && <span className="text-rose-600">{error}</span>}
+
+      <Button label="Submit" type="submit" disabled={isPending} />
 
       <div className="flex justify-center">Or</div>
 
