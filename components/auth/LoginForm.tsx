@@ -9,8 +9,10 @@ import Heading from "../common/Heading";
 import SocialAuth from "./SocialAuth";
 import { useState, useTransition } from "react";
 import { login } from "@/actions/auth/login";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { LOGIN_REDIRECT } from "@/routes";
+import { Alert, AlertTitle } from "../ui/alert";
+import { AlertTriangle, Terminal } from "lucide-react";
 
 const LoginForm = () => {
   const {
@@ -22,12 +24,19 @@ const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email is already in use with another provider!"
+      : "";
 
   const onSubmit = (data: LoginSchemaType) => {
     setError("");
     startTransition(() => {
       login(data).then((res) => {
         if (res?.error) {
+          router.replace("/login");
           setError(res.error);
         }
 
@@ -62,7 +71,19 @@ const LoginForm = () => {
         disabled={isPending}
       />
 
-      {error && <span className="text-rose-600">{error}</span>}
+      {error && (
+        <Alert variant="destructive">
+          <AlertTriangle />
+          <AlertTitle>{error}</AlertTitle>
+        </Alert>
+      )}
+
+      {urlError && (
+        <Alert variant="destructive">
+          <AlertTriangle />
+          <AlertTitle>{urlError}</AlertTitle>
+        </Alert>
+      )}
 
       <Button label="Submit" type="submit" disabled={isPending} />
 
