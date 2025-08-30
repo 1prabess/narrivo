@@ -70,9 +70,9 @@ const BlogForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col justify-between m-auto min-h-[100vh]"
+      className="flex flex-col justify-between m-auto min-h-[100vh] "
     >
-      <div>
+      <div className=" w-full">
         {uploadedCover && (
           <CoverImage
             url={uploadedCover}
@@ -85,21 +85,38 @@ const BlogForm = () => {
           <AddCoverImage setUploadedCover={setUploadedCover} />
         )}
 
-        <FormField
-          id="title"
-          placeholder="Blog Title"
-          register={register}
-          errors={errors}
-          inputClassNames="border-none text-7xl text-black dark:text-white font-bold bg-transparent px-0"
-        />
+        <div className="w-full">
+          <textarea
+            id="title"
+            placeholder="Blog Title"
+            {...register("title")}
+            className="w-full border-none text-5xl sm:text-6xl md:text-7xl text-black dark:text-white font-bold bg-transparent px-0 py-2 resize-none overflow-hidden outline-none"
+            rows={1}
+            onInput={(e) => {
+              const target = e.target as HTMLTextAreaElement;
+              target.style.height = "auto";
+              target.style.height = target.scrollHeight + "px";
+            }}
+          />
+          {errors.title && (
+            <span className="text-sm text-rose-400">
+              {errors.title.message}
+            </span>
+          )}
+        </div>
 
         <fieldset className="flex flex-col border-y mb-4 py-2">
-          <legend className="mb-2 pr-2">Select Tags</legend>
-          <div className="flex gap-4 flex-wrap w-full">
+          <legend className="mb-2 pr-2 text-base sm:text-lg md:text-xl">
+            Select Tags
+          </legend>
+          <div className="flex gap-2 sm:gap-4 flex-wrap w-full">
             {tags.map((tag) => {
               if (tag === "All") return null;
               return (
-                <label key={tag} className="flex items-center space-x-2">
+                <label
+                  key={tag}
+                  className="flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base"
+                >
                   <input type="checkbox" value={tag} {...register("tags")} />
                   <span>{tag}</span>
                 </label>
@@ -117,14 +134,28 @@ const BlogForm = () => {
         )}
       </div>
 
-      <div className="border-t pt-2">
-        <div className="flex items-center justify-between gap-6">
-          <div>
-            <Button type="button" label="Delete" outlined />
+      <div className="border-t pt-2 mt-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
+          <div className="w-full sm:w-auto">
+            <Button
+              type="button"
+              label="Delete"
+              outlined
+              className="w-full sm:w-auto"
+            />
           </div>
-          <div className="flex gap-4">
-            <Button type="button" label="Save as Draft" outlined />
-            <Button type="submit" label="Publish" />
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
+            <Button
+              type="button"
+              label="Save as Draft"
+              outlined
+              className="w-full sm:w-auto"
+            />
+            <Button
+              type="submit"
+              label="Publish"
+              className="w-full sm:w-auto"
+            />
           </div>
         </div>
       </div>
