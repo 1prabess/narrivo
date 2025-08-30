@@ -31,7 +31,7 @@ const FormField = <T extends FieldValues>({
 
   return (
     <div>
-      {label && <span className="block text-sm">{message}</span>}
+      {label && <span className="block text-sm">{label}</span>}
       <input
         id={id}
         disabled={disabled}

@@ -9,15 +9,18 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Pencil, Bookmark, User, Settings, LogOut } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const UserButton = () => {
+  const session = useSession();
+  const imageUrl = session.data?.user.image || "";
+
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <button className="inline-flex focus:outline-none">
           <Avatar className="w-10 h-10">
-            {/* <AvatarImage src="/path/to/avatar.jpg" alt="User avatar" /> */}
+            <AvatarImage src={imageUrl} alt="User avatar" />
             <AvatarFallback>
               <User />
             </AvatarFallback>
