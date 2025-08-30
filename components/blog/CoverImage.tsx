@@ -25,7 +25,7 @@ const CoverImage = ({ url, setUploadedCover, isEditor }: CoverImageProps) => {
   };
 
   return (
-    <div className="relative w-full h-[35vh] group">
+    <div className="relative w-full h-[25vh] md:h-[35vh] group">
       <Image fill src={url} alt="Cover Image" className="object-cover" />
       {isEditor && (
         <div className="absolute top-8 right-5 py-1 text-sm px-2 rounded-sm opacity-0 group-hover:opacity-100 transition-all dark:bg-neutral-800 bg-neutral-50 flex items-center gap-x-2 ">
