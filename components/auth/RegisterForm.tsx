@@ -1,6 +1,5 @@
 "use client";
 
-import { LoginSchema, LoginSchemaType } from "@/schemas/LoginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import FormField from "../common/FormField";
@@ -10,6 +9,8 @@ import SocialAuth from "./SocialAuth";
 import { RegisterSchema, RegisterSchemaType } from "@/schemas/RegisterSchema";
 import { signUp } from "@/actions/auth/register";
 import { useState, useTransition } from "react";
+import { Alert, AlertTitle } from "../ui/alert";
+import { AlertTriangle, Check } from "lucide-react";
 
 const RegisterForm = () => {
   const {
@@ -22,7 +23,6 @@ const RegisterForm = () => {
 
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-
   const onSubmit = (data: RegisterSchemaType) => {
     setError("");
     setSuccess("");
@@ -81,12 +81,23 @@ const RegisterForm = () => {
         disabled={isPending}
       />
 
+      {error && (
+        <Alert variant="destructive">
+          <AlertTriangle />
+          <AlertTitle>{error}</AlertTitle>
+        </Alert>
+      )}
+
+      {success && (
+        <Alert variant="default">
+          <Check />
+          <AlertTitle>{success}</AlertTitle>
+        </Alert>
+      )}
+
       <div className="flex justify-center">Or</div>
 
       <SocialAuth />
-
-      {error}
-      {success}
     </form>
   );
 };
