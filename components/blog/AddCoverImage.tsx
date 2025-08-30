@@ -1,6 +1,7 @@
 "use client";
 
 import { useEdgeStore } from "@/lib/edgestore";
+import { cn } from "@/lib/utils";
 import { ImageIcon, Loader2 } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -41,7 +42,7 @@ const AddCoverImage = ({
   };
 
   return (
-    <div className="flex justify-end">
+    <div className={cn(!replaceUrl && "mt-10")}>
       <input
         type="file"
         accept="image/*"
